@@ -61,9 +61,11 @@ export default function EditModal({
 
   const food = getFoodById(purchaseItem.foodId);
   const range = food?.rangeDaysByStorage[purchaseItem.storage];
-  const min = range?.min ?? 1;
-  const max = range?.max ?? 30;
-  const outOfRange = !isInInclusiveRange(notifyDays, min, max);
+  const guideMin = range?.min ?? 1;
+  const guideMax = range?.max ?? 30;
+  const stepperMin = 0;
+  const stepperMax = guideMax;
+  const outOfRange = !isInInclusiveRange(notifyDays, guideMin, guideMax);
 
   const handleSave = async () => {
     if (saving) return;
@@ -138,7 +140,7 @@ export default function EditModal({
             <View style={styles.stepperRow}>
               <Pressable
                 style={styles.stepperBtn}
-                onPress={() => setNotifyDays((n) => Math.max(min, n - 1))}
+                onPress={() => setNotifyDays((n) => Math.max(stepperMin, n - 1))}
               >
                 <Text style={styles.stepperText}>−</Text>
               </Pressable>
@@ -147,7 +149,7 @@ export default function EditModal({
               </ThemedText>
               <Pressable
                 style={styles.stepperBtn}
-                onPress={() => setNotifyDays((n) => Math.min(max, n + 1))}
+                onPress={() => setNotifyDays((n) => Math.min(stepperMax, n + 1))}
               >
                 <Text style={styles.stepperText}>＋</Text>
               </Pressable>
@@ -226,9 +228,9 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   scroll: { maxHeight: 320 },
-  title: { fontSize: 18, fontWeight: '600', textAlign: 'center', marginBottom: 8 },
-  foodName: { fontSize: 15, textAlign: 'center', marginBottom: 16, opacity: 0.9 },
-  label: { fontSize: 14, fontWeight: '500', marginBottom: 6, marginTop: 12 },
+  title: { fontSize: 20, fontWeight: '600', textAlign: 'center', marginBottom: 10 },
+  foodName: { fontSize: 17, textAlign: 'center', marginBottom: 18, opacity: 0.9 },
+  label: { fontSize: 16, fontWeight: '500', marginBottom: 8, marginTop: 14 },
   stepperRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -237,15 +239,15 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   stepperBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#2f95dc',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#0D9488',
     alignItems: 'center',
     justifyContent: 'center',
   },
   stepperText: { color: '#fff', fontSize: 22, fontWeight: '600' },
-  stepperValue: { fontSize: 20, fontWeight: '600', minWidth: 56, textAlign: 'center' },
+  stepperValue: { fontSize: 21, fontWeight: '600', minWidth: 60, textAlign: 'center' },
   input: {
     borderWidth: 1,
     borderRadius: 8,
@@ -261,7 +263,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#2f95dc',
+    borderColor: '#0D9488',
     borderRadius: 8,
   },
   photoBtnText: { fontSize: 14 },
@@ -281,7 +283,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     alignItems: 'center',
     borderRadius: 10,
-    backgroundColor: '#2f95dc',
+    backgroundColor: '#0D9488',
   },
   saveBtnDisabled: { opacity: 0.7 },
   saveBtnText: { color: '#fff', fontSize: 16, fontWeight: '600' },

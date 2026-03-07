@@ -10,6 +10,28 @@ export function isInInclusiveRange(value: number, min: number, max: number): boo
   return value >= min && value <= max;
 }
 
+/**
+ * Returns the number of milliseconds until the next local midnight (00:00:00).
+ * Used for scheduling a refresh when the date rolls over.
+ */
+export function msUntilNextMidnight(): number {
+  return msUntilNextLocalTime(0, 0);
+}
+
+/**
+ * Returns ms until next occurrence of the given local time (hour, minute).
+ * For testing: use msUntilNextLocalTime(3, 0) to refresh at 03:00.
+ */
+export function msUntilNextLocalTime(hour: number, minute: number): number {
+  const now = Date.now();
+  const todayStart = startOfDayLocal(now);
+  const d = new Date(todayStart);
+  d.setHours(hour, minute, 0, 0);
+  let targetMs = d.getTime();
+  if (targetMs <= now) targetMs += DAY;
+  return targetMs - now;
+}
+
 /** Start of the calendar day (00:00:00) in local time for the given timestamp. */
 export function startOfDayLocal(ms: number): number {
   const d = new Date(ms);

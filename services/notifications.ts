@@ -127,9 +127,14 @@ export async function scheduleForItem(
           }),
           data: { type: 'dayBefore', purchaseId: item.id },
         },
-        trigger: { date: new Date(beforeDate), channelId: CHANNEL_ID },
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.DATE,
+          date: new Date(beforeDate),
+          channelId: CHANNEL_ID,
+        },
       });
       ids.dayBefore = id;
+      console.log(LOG_PREFIX, 'scheduleNotificationAsync 戻り値 (dayBefore):', id);
       console.log(LOG_PREFIX, {
         itemId,
         purchasedAt,
@@ -138,6 +143,7 @@ export async function scheduleForItem(
         beforeDate: new Date(beforeDate).toISOString(),
         sameDayDate: new Date(sameDayDate).toISOString(),
         scheduled: 'dayBefore',
+        identifier: id,
       });
     }
   }
@@ -163,9 +169,14 @@ export async function scheduleForItem(
           }),
           data: { type: 'onDay', purchaseId: item.id },
         },
-        trigger: { date: new Date(sameDayDate), channelId: CHANNEL_ID },
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.DATE,
+          date: new Date(sameDayDate),
+          channelId: CHANNEL_ID,
+        },
       });
       ids.onDay = id;
+      console.log(LOG_PREFIX, 'scheduleNotificationAsync 戻り値 (onDay):', id);
       console.log(LOG_PREFIX, {
         itemId,
         purchasedAt,
@@ -174,6 +185,7 @@ export async function scheduleForItem(
         beforeDate: new Date(beforeDate).toISOString(),
         sameDayDate: new Date(sameDayDate).toISOString(),
         scheduled: 'onDay',
+        identifier: id,
       });
     }
   }
@@ -188,6 +200,12 @@ export async function scheduleForItem(
       sameDayDate: new Date(sameDayDate).toISOString(),
       skipped: 'all triggers in past or switches off',
     });
+  }
+
+  // 前日・当日の2件が実際にOSへ登録されているか確認（RTIInputSystemClient の警告は通知とは無関係）
+  if (Object.keys(ids).length > 0) {
+    const allScheduled = await Notifications.getAllScheduledNotificationsAsync();
+    console.log(LOG_PREFIX, 'getAllScheduledNotificationsAsync 結果:', JSON.stringify(allScheduled, null, 2));
   }
 
   return Object.keys(ids).length > 0 ? ids : null;

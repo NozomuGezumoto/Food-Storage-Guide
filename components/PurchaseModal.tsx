@@ -63,9 +63,11 @@ export default function PurchaseModal({ visible, food, onClose, onSaved }: Props
   }, [visible, food]);
 
   const range = food.rangeDaysByStorage[storage];
-  const min = range?.min ?? 1;
-  const max = range?.max ?? 30;
-  const outOfRange = !isInInclusiveRange(notifyDays, min, max);
+  const guideMin = range?.min ?? 1;
+  const guideMax = range?.max ?? 30;
+  const stepperMin = 0;
+  const stepperMax = guideMax;
+  const outOfRange = !isInInclusiveRange(notifyDays, guideMin, guideMax);
 
   const handleSave = async () => {
     try {
@@ -156,7 +158,7 @@ export default function PurchaseModal({ visible, food, onClose, onSaved }: Props
                 key={s}
                 style={[
                   styles.storageBtn,
-                  { backgroundColor: storage === s ? '#2f95dc' : isDark ? '#333' : '#eee' },
+                  { backgroundColor: storage === s ? colors.tint : isDark ? '#44403C' : '#ffffff' },
                   storage === s && styles.storageBtnActive,
                 ]}
                 onPress={() => {
@@ -179,12 +181,12 @@ export default function PurchaseModal({ visible, food, onClose, onSaved }: Props
           </View>
 
           <ThemedText style={styles.label}>
-            {t('purchase.label.notify', { min, max })}
+            {t('purchase.label.notify', { min: guideMin, max: guideMax })}
           </ThemedText>
           <View style={styles.stepperRow}>
             <Pressable
-              style={styles.stepperBtn}
-              onPress={() => setNotifyDays((n) => Math.max(min, n - 1))}
+              style={[styles.stepperBtn, { backgroundColor: colors.tint }]}
+              onPress={() => setNotifyDays((n) => Math.max(stepperMin, n - 1))}
             >
               <Text style={styles.stepperText}>−</Text>
             </Pressable>
@@ -192,15 +194,15 @@ export default function PurchaseModal({ visible, food, onClose, onSaved }: Props
               {t('common.daysFromReg', { count: notifyDays })}
             </ThemedText>
             <Pressable
-              style={styles.stepperBtn}
-              onPress={() => setNotifyDays((n) => Math.min(max, n + 1))}
+              style={[styles.stepperBtn, { backgroundColor: colors.tint }]}
+              onPress={() => setNotifyDays((n) => Math.min(stepperMax, n + 1))}
             >
               <Text style={styles.stepperText}>＋</Text>
             </Pressable>
           </View>
           {outOfRange && (
             <Text style={styles.warn}>
-              {t('purchase.outOfRange', { min, max })}
+              {t('purchase.outOfRange', { min: guideMin, max: guideMax })}
             </Text>
           )}
 
@@ -211,7 +213,7 @@ export default function PurchaseModal({ visible, food, onClose, onSaved }: Props
             <Switch
               value={notifyDayBefore}
               onValueChange={setNotifyDayBefore}
-              trackColor={{ false: '#ccc', true: '#2f95dc' }}
+              trackColor={{ false: '#A8A29E', true: colors.tint }}
             />
           </View>
           <View style={styles.switchRow}>
@@ -221,18 +223,18 @@ export default function PurchaseModal({ visible, food, onClose, onSaved }: Props
             <Switch
               value={notifyOnDay}
               onValueChange={setNotifyOnDay}
-              trackColor={{ false: '#ccc', true: '#2f95dc' }}
+              trackColor={{ false: '#A8A29E', true: colors.tint }}
             />
           </View>
 
           <ThemedText style={styles.label}>{t('common.photo.optional')}</ThemedText>
           <View style={styles.photoBtnRow}>
-            <Pressable style={styles.photoBtn} onPress={pickImage}>
+            <Pressable style={[styles.photoBtn, { borderColor: colors.tint }]} onPress={pickImage}>
               <Text style={[styles.photoBtnText, { color: colors.tint }]}>
                 {photoUri ? t('common.photo.change') : t('common.photo.add')}
               </Text>
             </Pressable>
-            <Pressable style={styles.photoBtn} onPress={takePhoto}>
+            <Pressable style={[styles.photoBtn, { borderColor: colors.tint }]} onPress={takePhoto}>
               <Text style={[styles.photoBtnText, { color: colors.tint }]}>
                 {t('common.photo.camera')}
               </Text>
@@ -246,12 +248,12 @@ export default function PurchaseModal({ visible, food, onClose, onSaved }: Props
         </ScrollView>
 
         <View style={styles.footer}>
-          <Pressable style={[styles.cancelBtn, isDark && { backgroundColor: '#333' }]} onPress={onClose}>
+          <Pressable style={[styles.cancelBtn, { backgroundColor: isDark ? colors.cardBg : '#ffffff' }]} onPress={onClose}>
             <Text style={[styles.cancelBtnText, { color: colors.text }]}>
               {t('common.cancel')}
             </Text>
           </Pressable>
-          <Pressable style={styles.saveBtn} onPress={handleSave}>
+          <Pressable style={[styles.saveBtn, { backgroundColor: colors.tint }]} onPress={handleSave}>
             <Text style={styles.saveBtnText}>{t('common.save')}</Text>
           </Pressable>
         </View>
@@ -299,31 +301,31 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 8,
   },
-  title: { fontSize: 18, fontWeight: '600', textAlign: 'center', marginBottom: 16 },
-  scroll: { paddingHorizontal: 20, maxHeight: 400 },
-  label: { fontSize: 14, fontWeight: '500', marginBottom: 6, marginTop: 12 },
-  storageRow: { flexDirection: 'row', gap: 10, marginBottom: 4 },
+  title: { fontSize: 20, fontWeight: '600', textAlign: 'center', marginBottom: 20 },
+  scroll: { paddingHorizontal: 22, maxHeight: 440 },
+  label: { fontSize: 16, fontWeight: '500', marginBottom: 8, marginTop: 16 },
+  storageRow: { flexDirection: 'row', gap: 12, marginBottom: 6 },
   storageBtn: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    backgroundColor: '#eee',
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    borderRadius: 10,
+    minHeight: 48,
+    justifyContent: 'center',
   },
-  storageBtnActive: { backgroundColor: '#2f95dc' },
+  storageBtnActive: {},
   storageBtnText: { fontSize: 15 },
   storageBtnTextActive: { color: '#fff', fontWeight: '500' },
-  stepperRow: { flexDirection: 'row', alignItems: 'center', gap: 16 },
+  stepperRow: { flexDirection: 'row', alignItems: 'center', gap: 20 },
   stepperBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#2f95dc',
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  stepperText: { color: '#fff', fontSize: 20, fontWeight: '600' },
-  stepperValue: { fontSize: 18, fontWeight: '600', minWidth: 48, textAlign: 'center' },
-  warn: { fontSize: 13, color: '#c00', marginTop: 6 },
+  stepperText: { color: '#fff', fontSize: 24, fontWeight: '600' },
+  stepperValue: { fontSize: 19, fontWeight: '600', minWidth: 56, textAlign: 'center' },
+  warn: { fontSize: 15, color: '#B91C1C', marginTop: 8 },
   switchRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -344,18 +346,17 @@ const styles = StyleSheet.create({
   photoBtn: {
     flex: 1,
     marginTop: 0,
-    paddingVertical: 10,
+    paddingVertical: 12,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#2f95dc',
+    borderWidth: 1.5,
     borderRadius: 8,
   },
   photoBtnText: { fontSize: 15 },
   photoPreviewWrap: { marginTop: 12, alignItems: 'center' },
   photoPreview: { width: 100, height: 100, borderRadius: 8 },
   footer: { flexDirection: 'row', gap: 12, paddingHorizontal: 20, paddingTop: 16 },
-  cancelBtn: { flex: 1, paddingVertical: 12, alignItems: 'center', borderRadius: 10, backgroundColor: '#eee' },
+  cancelBtn: { flex: 1, paddingVertical: 14, alignItems: 'center', borderRadius: 12, minHeight: 52 },
   cancelBtnText: { fontSize: 16 },
-  saveBtn: { flex: 1, paddingVertical: 12, alignItems: 'center', borderRadius: 10, backgroundColor: '#2f95dc' },
+  saveBtn: { flex: 1, paddingVertical: 14, alignItems: 'center', borderRadius: 12, minHeight: 52 },
   saveBtnText: { color: '#fff', fontSize: 16, fontWeight: '600' },
 });

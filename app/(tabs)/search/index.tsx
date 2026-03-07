@@ -15,13 +15,14 @@ import { usePurchasesStore } from '@/store/usePurchasesStore';
 import type { FoodMaster, FoodCategory } from '@/types';
 import { t, getFoodDisplayName } from '@/utils/i18n';
 import { useColorScheme } from '@/components/useColorScheme';
+import Colors from '@/constants/Colors';
 
-function FoodRow({ item }: { item: FoodMaster }) {
+function FoodRow({ item, colors }: { item: FoodMaster; colors: typeof Colors.light }) {
   return (
     <Link href={`/search/food/${item.id}`} asChild>
-      <Pressable style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}>
+      <Pressable style={({ pressed }) => [styles.card, { backgroundColor: colors.cardBg }, pressed && styles.cardPressed]}>
         <Text style={styles.rowTitle}>{getFoodDisplayName(item)}</Text>
-        <Text style={styles.rowSub}>
+        <Text style={[styles.rowSub, { color: colors.textMuted }]}>
           {item.storageOptions.map((s) =>
             s === 'fridge'
               ? t('common.storage.fridge')
@@ -42,6 +43,7 @@ export default function SearchScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
 
+  const colors = Colors[colorScheme ?? 'light'];
   const sections = useMemo(() => {
     const list =
       selectedCategory === 'all'
@@ -65,12 +67,12 @@ export default function SearchScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <View style={styles.searchRow} lightColor="#eee" darkColor="#333">
+      <View style={[styles.searchRow, { backgroundColor: colors.cardBg }]}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: colors.background, borderColor: colors.border }]}
           placeholder={t('search.placeholder.query')}
           placeholderTextColor="#888"
           value={query}
@@ -79,7 +81,7 @@ export default function SearchScreen() {
           autoCorrect={false}
         />
       </View>
-      <View style={styles.categoryWrapContainer} lightColor="#f5f5f5" darkColor="#1e1e1e">
+      <View style={[styles.categoryWrapContainer, { backgroundColor: colors.background }]}>
         <View style={styles.categoryWrap}>
           <Pressable
             style={[
@@ -126,11 +128,11 @@ export default function SearchScreen() {
         keyboardShouldPersistTaps="handled"
         stickySectionHeadersEnabled={false}
         renderSectionHeader={({ section: { title } }) => (
-          <View style={styles.sectionHeader} lightColor="#f0f0f0" darkColor="#2a2a2a">
+          <View style={[styles.sectionHeader, { backgroundColor: 'transparent' }]}>
             <Text style={styles.sectionTitle}>{title}</Text>
           </View>
         )}
-        renderItem={({ item }) => <FoodRow item={item} />}
+        renderItem={({ item }) => <FoodRow item={item} colors={colors} />}
       />
     </KeyboardAvoidingView>
   );
@@ -139,40 +141,38 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   searchRow: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0,0,0,0.1)',
+    borderBottomColor: 'rgba(0,0,0,0.08)',
   },
   input: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    fontSize: 16,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 17,
     borderWidth: 1,
-    borderColor: '#ddd',
   },
   categoryWrapContainer: {
+    paddingHorizontal: 14,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0,0,0,0.08)',
   },
   categoryWrap: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 12,
   },
   categoryChip: {
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 16,
-    backgroundColor: 'rgba(0,0,0,0.08)',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.04)',
     marginRight: 6,
     marginBottom: 6,
   },
   categoryChipSelected: {
-    backgroundColor: '#2f95dc',
+    backgroundColor: '#0D9488',
   },
   categoryChipText: {
     fontSize: 13,
@@ -186,18 +186,23 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   sectionHeader: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingTop: 12,
+    paddingBottom: 6,
+    paddingHorizontal: 14,
   },
-  sectionTitle: { fontSize: 13, fontWeight: '600', opacity: 0.8 },
-  row: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0,0,0,0.06)',
-    cursor: 'pointer',
+  sectionTitle: { fontSize: 20, fontWeight: '700' },
+  card: {
+    marginHorizontal: 14,
+    marginVertical: 6,
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
   },
-  rowPressed: { backgroundColor: 'rgba(0,0,0,0.05)' },
-  rowTitle: { fontSize: 16, fontWeight: '500', marginBottom: 2 },
-  rowSub: { fontSize: 13, opacity: 0.7 },
+  cardPressed: { opacity: 0.9 },
+  rowTitle: { fontSize: 19, fontWeight: '700', marginBottom: 4 },
+  rowSub: { fontSize: 15, opacity: 0.85 },
 });

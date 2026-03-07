@@ -72,7 +72,7 @@ export default function SettingsModal() {
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
-        <ThemedView style={styles.section} lightColor="#f5f5f5" darkColor="#222">
+        <ThemedView style={styles.section} lightColor="#ffffff" darkColor="#222">
           <ThemedText style={styles.label}>{t('settings.notificationTime')}</ThemedText>
           <ThemedText style={styles.hint}>{t('settings.notificationTimeHint')}</ThemedText>
           {Constants.appOwnership === 'expo' && (
@@ -127,13 +127,13 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 24,
   },
-  label: { fontSize: 16, fontWeight: '600', marginBottom: 4 },
-  hint: { fontSize: 13, opacity: 0.85, marginBottom: 12 },
+  label: { fontSize: 17, fontWeight: '600', marginBottom: 6 },
+  hint: { fontSize: 15, opacity: 0.85, marginBottom: 14 },
   expoGoHint: { fontSize: 12, opacity: 0.75, marginBottom: 8 },
   row: { flexDirection: 'row', alignItems: 'center' },
   input: {
-    width: 56,
-    height: 44,
+    width: 60,
+    height: 48,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
@@ -144,8 +144,8 @@ const styles = StyleSheet.create({
   separator: { fontSize: 20, marginHorizontal: 8, fontWeight: '600' },
   actions: { gap: 12 },
   saveBtn: {
-    backgroundColor: '#2f95dc',
-    paddingVertical: 14,
+    backgroundColor: '#0D9488',
+    paddingVertical: 16,
     borderRadius: 10,
     alignItems: 'center',
   },

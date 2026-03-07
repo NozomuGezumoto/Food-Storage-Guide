@@ -69,9 +69,11 @@ export default function PurchaseScreen() {
   }
 
   const range = food.rangeDaysByStorage[storage];
-  const min = range?.min ?? 1;
-  const max = range?.max ?? 30;
-  const outOfRange = !isInInclusiveRange(notifyDays, min, max);
+  const guideMin = range?.min ?? 1;
+  const guideMax = range?.max ?? 30;
+  const stepperMin = 0;
+  const stepperMax = guideMax;
+  const outOfRange = !isInInclusiveRange(notifyDays, guideMin, guideMax);
 
   const handleSave = async () => {
     console.log('[Purchase] handleSave が呼ばれました');
@@ -183,7 +185,7 @@ export default function PurchaseScreen() {
                   key={s}
                   style={[
                     styles.storageBtn,
-                    { backgroundColor: storage === s ? '#2f95dc' : isDark ? '#333' : '#eee' },
+                    { backgroundColor: storage === s ? '#0D9488' : isDark ? '#44403C' : '#ffffff' },
                     storage === s && styles.storageBtnActive,
                   ]}
                   onPress={() => {
@@ -204,25 +206,25 @@ export default function PurchaseScreen() {
             </View>
 
             <ThemedText style={styles.label}>
-              {t('purchase.label.notify', { min, max })}
+              {t('purchase.label.notify', { min: guideMin, max: guideMax })}
             </ThemedText>
             <View style={styles.stepperRow}>
               <Pressable
                 style={styles.stepperBtn}
-                onPress={() => setNotifyDays((n) => Math.max(min, n - 1))}
+                onPress={() => setNotifyDays((n) => Math.max(stepperMin, n - 1))}
               >
                 <Text style={styles.stepperText}>−</Text>
               </Pressable>
               <ThemedText style={styles.stepperValue}>
                 {t('common.daysFromReg', { count: notifyDays })}
               </ThemedText>
-              <Pressable style={styles.stepperBtn} onPress={() => setNotifyDays((n) => Math.min(max, n + 1))}>
+              <Pressable style={styles.stepperBtn} onPress={() => setNotifyDays((n) => Math.min(stepperMax, n + 1))}>
                 <Text style={styles.stepperText}>＋</Text>
               </Pressable>
             </View>
             {outOfRange && (
               <Text style={styles.warn}>
-                {t('purchase.outOfRange', { min, max })}
+                {t('purchase.outOfRange', { min: guideMin, max: guideMax })}
               </Text>
             )}
 
@@ -233,7 +235,7 @@ export default function PurchaseScreen() {
               <Switch
                 value={notifyDayBefore}
                 onValueChange={setNotifyDayBefore}
-                trackColor={{ false: '#ccc', true: '#2f95dc' }}
+                trackColor={{ false: '#ccc', true: '#0D9488' }}
               />
             </View>
             <View style={styles.switchRow}>
@@ -243,7 +245,7 @@ export default function PurchaseScreen() {
               <Switch
                 value={notifyOnDay}
                 onValueChange={setNotifyOnDay}
-                trackColor={{ false: '#ccc', true: '#2f95dc' }}
+                trackColor={{ false: '#ccc', true: '#0D9488' }}
               />
             </View>
 
@@ -253,7 +255,7 @@ export default function PurchaseScreen() {
                 styles.input,
                 styles.memoInput,
                 {
-                  backgroundColor: isDark ? '#333' : '#fff',
+                  backgroundColor: isDark ? '#44403C' : '#fff',
                   borderColor: isDark ? '#555' : '#ddd',
                   color: colors.text,
                 },
@@ -287,7 +289,7 @@ export default function PurchaseScreen() {
           </ScrollView>
           <View style={[styles.footerFixed, { backgroundColor: colors.background }]}>
             <Link href="/search" asChild>
-              <Pressable style={[styles.cancelBtn, isDark && { backgroundColor: '#333' }]}>
+              <Pressable style={[styles.cancelBtn, isDark && { backgroundColor: '#44403C' }]}>
                 <Text style={[styles.cancelBtnText, { color: colors.text }]}>
                   {t('common.cancel')}
                 </Text>
@@ -318,7 +320,7 @@ export default function PurchaseScreen() {
                 key={s}
                 style={[
                   styles.storageBtn,
-                  { backgroundColor: storage === s ? '#2f95dc' : isDark ? '#333' : '#eee' },
+                  { backgroundColor: storage === s ? '#0D9488' : isDark ? '#44403C' : '#ffffff' },
                   storage === s && styles.storageBtnActive,
                 ]}
                 onPress={() => {
@@ -339,25 +341,25 @@ export default function PurchaseScreen() {
           </View>
 
           <ThemedText style={styles.label}>
-            {t('purchase.label.notify', { min, max })}
+            {t('purchase.label.notify', { min: guideMin, max: guideMax })}
           </ThemedText>
           <View style={styles.stepperRow}>
             <Pressable
               style={styles.stepperBtn}
-              onPress={() => setNotifyDays((n) => Math.max(min, n - 1))}
+              onPress={() => setNotifyDays((n) => Math.max(stepperMin, n - 1))}
             >
               <Text style={styles.stepperText}>−</Text>
             </Pressable>
             <ThemedText style={styles.stepperValue}>
               {t('common.daysFromReg', { count: notifyDays })}
             </ThemedText>
-            <Pressable style={styles.stepperBtn} onPress={() => setNotifyDays((n) => Math.min(max, n + 1))}>
+            <Pressable style={styles.stepperBtn} onPress={() => setNotifyDays((n) => Math.min(stepperMax, n + 1))}>
               <Text style={styles.stepperText}>＋</Text>
             </Pressable>
           </View>
           {outOfRange && (
             <Text style={styles.warn}>
-              {t('purchase.outOfRange', { min, max })}
+              {t('purchase.outOfRange', { min: guideMin, max: guideMax })}
             </Text>
           )}
 
@@ -368,7 +370,7 @@ export default function PurchaseScreen() {
             <Switch
               value={notifyDayBefore}
               onValueChange={setNotifyDayBefore}
-              trackColor={{ false: '#ccc', true: '#2f95dc' }}
+              trackColor={{ false: '#ccc', true: '#0D9488' }}
             />
           </View>
           <View style={styles.switchRow}>
@@ -378,7 +380,7 @@ export default function PurchaseScreen() {
             <Switch
               value={notifyOnDay}
               onValueChange={setNotifyOnDay}
-              trackColor={{ false: '#ccc', true: '#2f95dc' }}
+              trackColor={{ false: '#ccc', true: '#0D9488' }}
             />
           </View>
 
@@ -388,7 +390,7 @@ export default function PurchaseScreen() {
               styles.input,
               styles.memoInput,
               {
-                backgroundColor: isDark ? '#333' : '#fff',
+                backgroundColor: isDark ? '#44403C' : '#fff',
                 borderColor: isDark ? '#555' : '#ddd',
                 color: colors.text,
               },
@@ -422,7 +424,7 @@ export default function PurchaseScreen() {
 
           <View style={styles.footer}>
             <Link href="/search" asChild>
-              <Pressable style={[styles.cancelBtn, isDark && { backgroundColor: '#333' }]}>
+              <Pressable style={[styles.cancelBtn, isDark && { backgroundColor: '#44403C' }]}>
                 <Text style={[styles.cancelBtnText, { color: colors.text }]}>
                   {t('common.cancel')}
                 </Text>
@@ -465,47 +467,47 @@ const styles = StyleSheet.create({
     paddingBottom: isNative ? 36 : 16,
   },
   error: { padding: 16 },
-  link: { color: '#2f95dc', padding: 16 },
+  link: { color: '#0D9488', padding: 16 },
   title: {
-    fontSize: isNative ? 18 : 20,
+    fontSize: isNative ? 19 : 21,
     fontWeight: '700',
     marginBottom: isNative ? 12 : 20,
   },
   label: {
-    fontSize: isNative ? 13 : 14,
+    fontSize: isNative ? 15 : 16,
     fontWeight: '500',
     marginBottom: isNative ? 4 : 6,
     marginTop: isNative ? 10 : 16,
   },
   storageRow: { flexDirection: 'row', gap: 10, marginBottom: 4 },
   storageBtn: {
-    paddingVertical: isNative ? 6 : 8,
-    paddingHorizontal: 14,
+    paddingVertical: isNative ? 10 : 12,
+    paddingHorizontal: 16,
     borderRadius: 8,
-    backgroundColor: '#eee',
+    backgroundColor: '#ffffff',
   },
-  storageBtnActive: { backgroundColor: '#2f95dc' },
-  storageBtnText: { fontSize: isNative ? 14 : 15 },
+  storageBtnActive: { backgroundColor: '#0D9488' },
+  storageBtnText: { fontSize: isNative ? 15 : 16 },
   storageBtnTextActive: { color: '#fff', fontWeight: '500' },
   stepperRow: { flexDirection: 'row', alignItems: 'center', gap: isNative ? 12 : 16 },
   stepperBtn: {
-    width: isNative ? 36 : 40,
-    height: isNative ? 36 : 40,
-    borderRadius: isNative ? 18 : 20,
-    backgroundColor: '#2f95dc',
+    width: isNative ? 44 : 48,
+    height: isNative ? 44 : 48,
+    borderRadius: isNative ? 22 : 24,
+    backgroundColor: '#0D9488',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  stepperText: { color: '#fff', fontSize: isNative ? 18 : 20, fontWeight: '600' },
-  stepperValue: { fontSize: isNative ? 16 : 18, fontWeight: '600', minWidth: 48, textAlign: 'center' },
-  warn: { fontSize: 12, color: '#c00', marginTop: 4 },
+  stepperText: { color: '#fff', fontSize: isNative ? 22 : 24, fontWeight: '600' },
+  stepperValue: { fontSize: isNative ? 17 : 19, fontWeight: '600', minWidth: 52, textAlign: 'center' },
+  warn: { fontSize: 14, color: '#B91C1C', marginTop: 6 },
   switchRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: isNative ? 4 : 8,
   },
-  switchLabel: { fontSize: isNative ? 14 : 15 },
+  switchLabel: { fontSize: isNative ? 15 : 16 },
   input: {
     borderWidth: 1,
     borderColor: '#ddd',
@@ -523,17 +525,17 @@ const styles = StyleSheet.create({
     paddingVertical: isNative ? 8 : 10,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#2f95dc',
+    borderColor: '#0D9488',
     borderRadius: 8,
   },
   photoBtnText: { fontSize: isNative ? 14 : 15 },
   footer: { flexDirection: 'row', gap: 12, marginTop: isNative ? 14 : 24 },
   cancelBtn: {
     flex: 1,
-    paddingVertical: isNative ? 12 : 14,
+    paddingVertical: isNative ? 14 : 16,
     alignItems: 'center',
     borderRadius: 10,
-    backgroundColor: '#eee',
+    backgroundColor: '#ffffff',
   },
   cancelBtnText: { fontSize: isNative ? 15 : 16 },
   photoPreviewWrap: { marginTop: isNative ? 8 : 12, alignItems: 'center' },
@@ -544,10 +546,10 @@ const styles = StyleSheet.create({
   },
   saveBtn: {
     flex: 1,
-    paddingVertical: isNative ? 12 : 14,
+    paddingVertical: isNative ? 14 : 16,
     alignItems: 'center',
     borderRadius: 10,
-    backgroundColor: '#2f95dc',
+    backgroundColor: '#0D9488',
   },
   saveBtnDisabled: { opacity: 0.7 },
   saveBtnText: { color: '#fff', fontSize: isNative ? 15 : 16, fontWeight: '600' },

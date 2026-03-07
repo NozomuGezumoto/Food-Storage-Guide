@@ -95,3 +95,8 @@ npx expo start
 ## 後回し（MVP では未実装）
 
 - バーコード・レシピ提案・在庫数量・GPS 自動地域判定・Settings 画面（通知デフォルト設定）。
+
+## Documentation
+
+- **[docs/APP.md](docs/APP.md)** — App overview, features, and architecture (English)
+- **[docs/EAS.md](docs/EAS.md)** — EAS Build & Submit guide (English)
