@@ -59,4 +59,7 @@ We may update this Privacy Policy from time to time. The "Last updated" date at 
 
 ## Contact
 
-If you have questions about this Privacy Policy or the App's data practices, please contact us through the App Store or Play Store listing, or via the contact information provided in the app description.
+If you have questions about this Privacy Policy or the App's data practices, please contact us:
+
+- **Email**: [nozomusp29@gmail.com]
+- Or through the App Store or Play Store listing
